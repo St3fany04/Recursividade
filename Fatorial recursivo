@@ -1,0 +1,9 @@
+public long fatorialRecursivo(int numero) {
+    // CASO BASE: garantia de saída da recursão
+    if (numero == 0 || numero == 1) {
+        return 1;
+    }
+    
+    // CASO RECURSIVO: chamada da função a si mesma com um problema menor
+    return numero * fatorialRecursivo(numero - 1);
+}
