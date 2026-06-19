@@ -1,0 +1,138 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+/**
+ * Classe Main que implementa um menu interativo para demonstrar
+ * a diferença entre algoritmos iterativos e recursivos.
+ */
+public class Main {
+    public static void main(String[] args) {
+        int opt;
+        Scanner entrada = new Scanner(System.in);
+
+        do {
+            exibirMenu();
+            System.out.print(":> ");
+            try {
+                opt = entrada.nextInt();
+                processarOpcao(opt, entrada);
+                System.out.println();
+                System.out.println("---");
+            } catch (InputMismatchException e) {
+                tratarErroInput(entrada);
+                opt = 0;
+            }
+        } while (opt != 0);
+
+        System.out.println("Programa finalizado!!!");
+        entrada.close();
+    }
+
+    /**
+     * Exibe o menu principal com as opções disponíveis
+     */
+    private static void exibirMenu() {
+        System.out.println("\nEscolha a opção desejada");
+        System.out.println("1: \t Fatorial Iterativo");
+        System.out.println("2: \t Fatorial Recursivo");
+        System.out.println("0: \t SAIR");
+    }
+
+    /**
+     * Processa a opção escolhida pelo usuário
+     * @param opt a opção escolhida
+     * @param entrada o Scanner para leitura de entrada
+     */
+    private static void processarOpcao(int opt, Scanner entrada) {
+        switch (opt) {
+            case 1 -> calcularFatorialIterativo(entrada);
+            case 2 -> calcularFatorialRecursivo(entrada);
+            default -> {
+                if (opt != 0) {
+                    System.out.println("Opção inválida, tente novamente...");
+                }
+            }
+        }
+    }
+
+    /**
+     * Calcula e exibe o fatorial de um número de forma iterativa
+     * @param entrada o Scanner para leitura de entrada
+     */
+    private static void calcularFatorialIterativo(Scanner entrada) {
+        System.out.println();
+        System.out.println("=== Fatorial Iterativo ===");
+        System.out.print("Informe o número para calcular o fatorial: ");
+        
+        try {
+            int numero = entrada.nextInt();
+            if (numero < 0) {
+                System.out.println("❌ Fatorial não é definido para números negativos!");
+                return;
+            }
+            
+            long inicio = System.currentTimeMillis();
+            Fatorial fatorial = new Fatorial(numero);
+            long resultado = fatorial.fatorialIterativo();
+            long fim = System.currentTimeMillis();
+            
+            System.out.println("✓ Fatorial de " + numero + " = " + resultado);
+            System.out.println("⏱ Tempo de execução: " + (fim - inicio) + "ms");
+        } catch (InputMismatchException e) {
+            System.out.println("❌ Entrada inválida! Digite um número inteiro.");
+            entrada.nextLine();
+        } catch (IllegalArgumentException e) {
+            System.out.println("❌ " + e.getMessage());
+        }
+    }
+
+    /**
+     * Calcula e exibe o fatorial de um número de forma recursiva
+     * @param entrada o Scanner para leitura de entrada
+     */
+    private static void calcularFatorialRecursivo(Scanner entrada) {
+        System.out.println();
+        System.out.println("=== Fatorial Recursivo ===");
+        System.out.print("Informe o número para calcular o fatorial: ");
+        
+        try {
+            int numero = entrada.nextInt();
+            if (numero < 0) {
+                System.out.println("❌ Fatorial não é definido para números negativos!");
+                return;
+            }
+            
+            if (numero > 20) {
+                System.out.println("⚠ Aviso: Números muito grandes podem causar StackOverflow!");
+            }
+            
+            long inicio = System.currentTimeMillis();
+            Fatorial fatorial = new Fatorial(numero);
+            long resultado = fatorial.fatorialRecursivo();
+            long fim = System.currentTimeMillis();
+            
+            System.out.println("✓ Fatorial de " + numero + " = " + resultado);
+            System.out.println("⏱ Tempo de execução: " + (fim - inicio) + "ms");
+        } catch (InputMismatchException e) {
+            System.out.println("❌ Entrada inválida! Digite um número inteiro.");
+            entrada.nextLine();
+        } catch (IllegalArgumentException e) {
+            System.out.println("❌ " + e.getMessage());
+        } catch (StackOverflowError e) {
+            System.out.println("❌ StackOverflow! O número é muito grande para recursão.");
+        }
+    }
+
+    /**
+     * Trata erros de entrada do usuário
+     * @param entrada o Scanner para leitura de entrada
+     */
+    private static void tratarErroInput(Scanner entrada) {
+        System.out.println("################################");
+        System.out.println("❌ VOCÊ INSERIU UM VALOR NÃO NUMÉRICO!!");
+        System.out.println("Tente novamente, ou digite 0 para SAIR.");
+        if (entrada.hasNext()) {
+            entrada.next();
+        }
+    }
+}
